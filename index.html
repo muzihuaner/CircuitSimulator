@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>快点电路模拟器</title>
+    <style>
+        /* --- 全局样式重置 --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- 主内容区域 --- */
+        main {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- iframe 样式 --- */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* --- 新增：右下角按钮样式 --- */
+        .help-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #007bff; /* 蓝色背景 */
+            color: white;
+            border: none;
+            border-radius: 50%; /* 圆形 */
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 1000; /* 确保在 iframe 之上 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .help-btn:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        /* --- 新增：弹窗 (Modal) 样式 --- */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            z-index: 2000; /* 这里的层级要最高 */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5); /* 半透明黑色背景 */
+            backdrop-filter: blur(2px); /*由此添加背景模糊效果 */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 距顶部 15%，水平居中 */
+            padding: 25px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px; /* 最大宽度 */
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* 关闭按钮样式 */
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+            top: 5px;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <iframe src="https://www.falstad.com/circuit/circuitjs.html?startCircuit=lrc.txt"
+            title="Falstad Circuit Simulator" allowfullscreen>
+        </iframe>
+    </main>
+
+    <button id="helpBtn" class="help-btn" title="查看说明">?</button>
+
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>使用说明</h3>
+            <p>这是一个电子电路模拟器。程序启动后，你会看到一个简单的LRC电路的动画示意图。</p>
+            <ul>
+                <li><span style="color:green; font-weight:bold;">绿色</span> 表示正电压</li>
+                <li><span style="color:gray; font-weight:bold;">灰色</span> 表示接地</li>
+                <li><span style="color:red; font-weight:bold;">红色</span> 表示负电压</li>
+                <li>移动的 <span style="color:#d4d400; font-weight:bold;">黄色圆点</span> 表示电流</li>
+            </ul>
+            <p>要打开或关闭开关，只需单击它即可。</p>
+            <p>将鼠标悬停在电路的任何元件上，窗口右下角将显示该元件的简要说明及其当前状态。</p>
+            <p>要修改元件，请将鼠标悬停在其上方，单击鼠标右键（如果您使用的是 Mac，则按住 Control 键并单击），然后选择“编辑”。</p>
+            <p>“电路”菜单包含许多示例电路供您尝试。</p>
+            <a href="https://www.falstad.com/circuit/doc/">使用文档</a>
+        </div>
+    </div>
+
+    <script>
+        // 获取元素
+        var modal = document.getElementById("helpModal");
+        var btn = document.getElementById("helpBtn");
+        var span = document.getElementsByClassName("close-btn")[0];
+
+        // 点击按钮打开弹窗
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // 点击 X 关闭弹窗
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // 点击弹窗外部区域也可以关闭
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
